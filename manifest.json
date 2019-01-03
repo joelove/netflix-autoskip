@@ -1,0 +1,6 @@
+{
+  "name": "Configurable Netflix Autoskip",
+  "version": "0.1.0",
+  "description": "Highly configurable intro, recap and next episode skipping for Netflix. Built to be reliable and simple to use.",
+  "manifest_version": 2
+}
