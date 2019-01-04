@@ -7,18 +7,21 @@
   "license": "GNU GPLv3",
   "scripts": {
     "test": "mocha test/**/*spec.js --require @babel/register",
-    "build": "babel src/index.js --out-file dist/index.js"
+    "build": "webpack --mode production"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "@babel/register": "^7.0.0",
+    "babel-loader": "^8.0.5",
     "chai": "^4.2.0",
     "eslint": "^5.11.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "webpack": "^4.28.3",
+    "webpack-cli": "^3.2.0"
   },
   "dependencies": {
     "ramda": "^0.26.1"
