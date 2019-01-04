@@ -1,51 +1,30 @@
 import {
+  compose,
   forEach,
-  pipe,
-  prop,
-  construct,
-  invoker,
-  when,
   head,
-  complement,
+  pipe,
+  when,
 } from 'ramda';
 
-import {
-  isNull,
-  isUndefined,
-} from 'lodash/fp';
+import { SKIP_INTRO_SELECTOR } from './constants/element-selectors';
 
-/* Constants */
-const INTRO_LABEL = 'Skip Intro';
-// const RECAP_LABEL = 'Skip Recap';
+import { addedNodesGetter } from './utilities/getters';
+import { mutationObserverConstructor } from './utilities/constructors';
+import { isNotNull, isElement } from './utilities/conditions';
+import { invoke, invokeUnary, invokeBinary } from './utilities/operations';
 
-/* Selectors */
-const SKIP_INTRO_SELECTOR = `[aria-label="${INTRO_LABEL}"]`;
-
-/* Utilities */
-const invoke = invoker(0);
-const invokeUnary = invoker(1);
-const isNotNull = complement(isNull);
-const isNotUndefined = complement(isUndefined);
-
-/* Getters */
-const addedNodesGetter = prop('addedNodes');
-
-/* Invokers */
 const invokeClick = invoke('click');
 const selectNode = invokeUnary('querySelector');
+const observeNode = invokeBinary('observe');
 
-/* Node Selectors */
+const observeDocument = observeNode(document.body, { childList: true, subtree: true });
+const documentMutationObserver = compose(observeDocument, mutationObserverConstructor);
 
-/* Constructors */
-const mutationObserverConstructor = construct(window.MutationObserver);
-
-/* Event Handlers */
-const clickNode = when(isNotNull, invokeClick);
 const selectSkipIntroAnchor = selectNode(SKIP_INTRO_SELECTOR);
+const clickNode = when(isNotNull, invokeClick);
 const clickSkipIntroAnchor = pipe(selectSkipIntroAnchor, clickNode);
-const onNodeAdded = when(isNotUndefined, clickSkipIntroAnchor);
+const onNodeAdded = when(isElement, clickSkipIntroAnchor);
 const onMutationObserved = pipe(addedNodesGetter, head, onNodeAdded);
 const onMutationsObserved = forEach(onMutationObserved);
 
-const mutationObserver = mutationObserverConstructor(onMutationsObserved);
-mutationObserver.observe(document.body, { childList: true, subtree: true });
+documentMutationObserver(onMutationsObserved);
