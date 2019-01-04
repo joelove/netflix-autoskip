@@ -16,5 +16,5 @@ yarn test
 
 Build the extension:
 ```
-yarn run build
+yarn build
 ```
