@@ -3,12 +3,7 @@
   "version": "0.1.0",
   "description": "Highly configurable intro, recap and next episode skipping for Netflix. Built to be reliable and simple to use.",
   "manifest_version": 2,
-  "permissions": [
-    "activeTab",
-    "storage"
-  ],
-  "background": {
-    "scripts": ["dist/background.js"],
-    "persistent": false
-  }
+  "content_scripts": [
+    { "matches": ["*://*.netflix.com/watch/*"], "js": ["dist/background.js"] }
+  ]
 }
